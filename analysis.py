@@ -1,7 +1,9 @@
-#Updated 2022-08-10
 import numpy as np
 import mdtraj as md
 import matplotlib.pyplot as plt
+from datetime import datetime
+start_time = datetime.now()
+
 def analysis(typ, endresidue): #specify type of glycosilation (in string) and end residue# until to analyze
     fig1 = plt.figure() #rmsd
     ax1 = fig1.add_subplot(111)
@@ -36,13 +38,18 @@ def analysis(typ, endresidue): #specify type of glycosilation (in string) and en
      #print(rmsd1fixed)
     ax1.set_xlabel('Time (ns)')
     ax1.set_ylabel('RMSD (A)')
-    ax1.legend(loc=4)
-    fig1.savefig('rmsd_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
+    ax1.legend()
+    fig1.savefig('Analysis/rmsd_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
+    print('Analysis/rmsd_'+typ+'.png file generated! Last updated at ',datetime.now())
     ax2.set_xlabel('Time (ns)')
     ax2.set_ylabel('rgyr (A)')
-    ax2.legend(loc=4)
-    fig2.savefig('rgyr_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
+    ax2.legend()
+    fig2.savefig('Analysis/rgyr_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
+    print('Analysis/rgyr_'+typ+'.png file generated! Last updated at ',datetime.now())
+
 
 analysis('prot', 500)
 analysis('m9', 300)
 analysis('nat', 200)
+end_time = datetime.now()
+print('Program took {}'.format(end_time - start_time))
