@@ -81,25 +81,25 @@ def analysis(typ, endresidue): #specify type of glycosilation (in string) and en
 
     ax3.fill_between(np.arange(0, len(rmsfrange[0])), np.mean(rmsfrange10, axis=0) - np.std(rmsfrange10, axis=0), np.mean(rmsfrange10, axis=0) + np.std(rmsfrange10, axis=0), color='b', alpha=0.4)
     
-    ax4.plot(np.arange(0, len(rmsfrange2[0])), np.mean(rmsfrange20, axis=0), color='b', label="mean", linewidth=0.7)
+    ax4.plot(np.arange(634, 1267), np.mean(rmsfrange20, axis=0), color='b', label="mean", linewidth=0.7)
 
-    ax4.fill_between(np.arange(0, len(rmsfrange2[0])), np.mean(rmsfrange20, axis=0) - np.std(rmsfrange20, axis=0), np.mean(rmsfrange20, axis=0) + np.std(rmsfrange20, axis=0), color='b', alpha=0.4)
+    ax4.fill_between(np.arange(634, 1267), np.mean(rmsfrange20, axis=0) - np.std(rmsfrange20, axis=0), np.mean(rmsfrange20, axis=0) + np.std(rmsfrange20, axis=0), color='b', alpha=0.4)
     
-    ax5.plot(np.arange(0, len(rmsfrange3[0])), np.mean(rmsfrange30, axis=0), color='b', label="mean", linewidth=0.7)
+    ax5.plot(np.arange(1268,1901), np.mean(rmsfrange30, axis=0), color='b', label="mean", linewidth=0.7)
 
-    ax5.fill_between(np.arange(0, len(rmsfrange3[0])), np.mean(rmsfrange30, axis=0) - np.std(rmsfrange30, axis=0), np.mean(rmsfrange30, axis=0) + np.std(rmsfrange30, axis=0), color='b', alpha=0.4)
+    ax5.fill_between(np.arange(1268,1901), np.mean(rmsfrange30, axis=0) - np.std(rmsfrange30, axis=0), np.mean(rmsfrange30, axis=0) + np.std(rmsfrange30, axis=0), color='b', alpha=0.4)
     
     ax6.plot(np.arange(0, len(rmsfrangeavg[0])), np.mean(rmsfrangeavg10, axis=0), color='b', label="mean", linewidth=0.7)
 
     ax6.fill_between(np.arange(0, len(rmsfrangeavg[0])), np.mean(rmsfrangeavg10, axis=0) - np.std(rmsfrangeavg10, axis=0), np.mean(rmsfrangeavg10, axis=0) + np.std(rmsfrangeavg10, axis=0), color='b', alpha=0.4)
     
-    ax7.plot(np.arange(0, len(rmsfrangeavg2[0])), np.mean(rmsfrangeavg20, axis=0), color='b', label="mean", linewidth=0.7)
+    ax7.plot(np.arange(634, 1267), np.mean(rmsfrangeavg20, axis=0), color='b', label="mean", linewidth=0.7)
 
-    ax7.fill_between(np.arange(0, len(rmsfrangeavg2[0])), np.mean(rmsfrangeavg20, axis=0) - np.std(rmsfrangeavg20, axis=0), np.mean(rmsfrangeavg20, axis=0) + np.std(rmsfrangeavg20, axis=0), color='b', alpha=0.4)
+    ax7.fill_between(np.arange(634, 1267), np.mean(rmsfrangeavg20, axis=0) - np.std(rmsfrangeavg20, axis=0), np.mean(rmsfrangeavg20, axis=0) + np.std(rmsfrangeavg20, axis=0), color='b', alpha=0.4)
     
-    ax8.plot(np.arange(0, len(rmsfrangeavg3[0])), np.mean(rmsfrangeavg30, axis=0), color='b', label="mean", linewidth=0.7)
+    ax8.plot(np.arange(1268,1901), np.mean(rmsfrangeavg30, axis=0), color='b', label="mean", linewidth=0.7)
 
-    ax8.fill_between(np.arange(0, len(rmsfrangeavg3[0])), np.mean(rmsfrangeavg30, axis=0) - np.std(rmsfrangeavg30, axis=0), np.mean(rmsfrangeavg30, axis=0) + np.std(rmsfrangeavg30, axis=0), color='b', alpha=0.4)
+    ax8.fill_between(np.arange(1268,1901), np.mean(rmsfrangeavg30, axis=0) - np.std(rmsfrangeavg30, axis=0), np.mean(rmsfrangeavg30, axis=0) + np.std(rmsfrangeavg30, axis=0), color='b', alpha=0.4)
     
 
     ax1.set_xlabel('Time (ns)')
