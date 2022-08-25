@@ -5,36 +5,14 @@ from datetime import datetime
 start_time = datetime.now()
 
 def analysis(typ, endresidue): #specify type of glycosilation (in string) and end residue# until to analyze
-    fig1 = plt.figure() #rmsd
-    ax1 = fig1.add_subplot(111)
-
-    fig2 = plt.figure() #rgyr
-    ax2 = fig2.add_subplot(111)
+    fig, ax = [None]*10, [None]*10
+    for i in range(1,10):
+        fig[i] = plt.figure() 
+        ax[i] = fig[i].add_subplot(111)
     
-    fig3 = plt.figure() #rmsf 1-633
-    ax3 = fig3.add_subplot(111)
-    
-    fig4 = plt.figure() #rmsf 634:1267
-    ax4 = fig4.add_subplot(111)
-    
-    fig5 = plt.figure() #rmsf 1268:1901
-    ax5 = fig5.add_subplot(111)
-    
-    fig6 = plt.figure() #rmsf avg 1-633
-    ax6 = fig6.add_subplot(111)
-
-    fig7 = plt.figure() #rmsf avg 634:1267
-    ax7 = fig7.add_subplot(111)
-
-    fig8 = plt.figure() #rmsf avg 1268:1901
-    ax8 = fig8.add_subplot(111)
-    
-    fig9 = plt.figure() #rgyr2 (glycans included)
-    ax9 = fig9.add_subplot(111)
-    
-
-
     rmsdrange, rgyrrange, rgyrrange2, rmsfrange, rmsfrange2, rmsfrange3, rmsfrangeavg, rmsfrangeavg2, rmsfrangeavg3 = [None] * 5, [None] * 5, [None] * 5, [None] * 5, [None] * 5, [None] * 5, [None] * 5, [None] * 5, [None] * 5
+
+
     traj = md.load('sosip_prot/amber_run/01prot.nc', top='sosip_prot/amber_run/01prot.pdb') #0th frame of prot
     protein_sel = traj.topology.select('protein and name CA')
     protein_traj0 = traj.atom_slice(protein_sel)
@@ -51,13 +29,13 @@ def analysis(typ, endresidue): #specify type of glycosilation (in string) and en
         protein_traj2 = traj.atom_slice(protein_sel2)
         rmsd = md.rmsd(protein_traj, protein_traj, 0)
         rmsdrange[i-1] = rmsd[1:endresidue]
-        ax1.plot(np.arange(0, len(rmsdrange[i-1])), rmsdrange[i-1]*10, c=colors[color_index], label='0'+str(i)+typ)
-        rgyr = md.compute_rg(protein_traj1)
+        ax[1].plot(np.arange(0, len(rmsdrange[i-1])), rmsdrange[i-1]*10, c=colors[color_index], label='0'+str(i)+typ)
+        rgyr = md.compute_rg(protein_traj1) #rgyr for protein
         rgyrrange[i-1] = rgyr[1:endresidue]
-        ax2.plot(np.arange(0, len(rgyrrange[i-1])), rgyrrange[i-1]*10, c=colors[color_index], label='0'+str(i)+typ)
+        ax[2].plot(np.arange(0, len(rgyrrange[i-1])), rgyrrange[i-1]*10, c=colors[color_index], label='0'+str(i)+typ)
         rgyr2 = md.compute_rg(protein_traj2) #rgyr for protein plus glycan
         rgyrrange2[i-1] = rgyr2[1:endresidue]
-        ax9.plot(np.arange(0, len(rgyrrange2[i-1])), rgyrrange2[i-1]*10, c=colors[color_index], label='0'+str(i)+typ)
+        ax[9].plot(np.arange(0, len(rgyrrange2[i-1])), rgyrrange2[i-1]*10, c=colors[color_index], label='0'+str(i)+typ)
         rmsf = md.rmsf(protein_traj, protein_traj0, 0)
         rmsfrange[i-1] = rmsf[0:633]
         rmsfrange2[i-1] = rmsf[634:1267]
@@ -77,101 +55,101 @@ def analysis(typ, endresidue): #specify type of glycosilation (in string) and en
     rmsfrangeavg30 = np.multiply(rmsfrangeavg3,10)
 
 
-    ax3.plot(np.arange(0, len(rmsfrange[0])), np.mean(rmsfrange10, axis=0), color='b', label="mean", linewidth=0.7)
+    ax[3].plot(np.arange(0, len(rmsfrange[0])), np.mean(rmsfrange10, axis=0), color='b', label="mean", linewidth=0.7)
 
-    ax3.fill_between(np.arange(0, len(rmsfrange[0])), np.mean(rmsfrange10, axis=0) - np.std(rmsfrange10, axis=0), np.mean(rmsfrange10, axis=0) + np.std(rmsfrange10, axis=0), color='b', alpha=0.4)
+    ax[3].fill_between(np.arange(0, len(rmsfrange[0])), np.mean(rmsfrange10, axis=0) - np.std(rmsfrange10, axis=0), np.mean(rmsfrange10, axis=0) + np.std(rmsfrange10, axis=0), color='b', alpha=0.4)
     
-    ax4.plot(np.arange(634, 1267), np.mean(rmsfrange20, axis=0), color='b', label="mean", linewidth=0.7)
+    ax[4].plot(np.arange(634, 1267), np.mean(rmsfrange20, axis=0), color='b', label="mean", linewidth=0.7)
 
-    ax4.fill_between(np.arange(634, 1267), np.mean(rmsfrange20, axis=0) - np.std(rmsfrange20, axis=0), np.mean(rmsfrange20, axis=0) + np.std(rmsfrange20, axis=0), color='b', alpha=0.4)
+    ax[4].fill_between(np.arange(634, 1267), np.mean(rmsfrange20, axis=0) - np.std(rmsfrange20, axis=0), np.mean(rmsfrange20, axis=0) + np.std(rmsfrange20, axis=0), color='b', alpha=0.4)
     
-    ax5.plot(np.arange(1268,1901), np.mean(rmsfrange30, axis=0), color='b', label="mean", linewidth=0.7)
+    ax[5].plot(np.arange(1268,1901), np.mean(rmsfrange30, axis=0), color='b', label="mean", linewidth=0.7)
 
-    ax5.fill_between(np.arange(1268,1901), np.mean(rmsfrange30, axis=0) - np.std(rmsfrange30, axis=0), np.mean(rmsfrange30, axis=0) + np.std(rmsfrange30, axis=0), color='b', alpha=0.4)
+    ax[5].fill_between(np.arange(1268,1901), np.mean(rmsfrange30, axis=0) - np.std(rmsfrange30, axis=0), np.mean(rmsfrange30, axis=0) + np.std(rmsfrange30, axis=0), color='b', alpha=0.4)
     
-    ax6.plot(np.arange(0, len(rmsfrangeavg[0])), np.mean(rmsfrangeavg10, axis=0), color='b', label="mean", linewidth=0.7)
+    ax[6].plot(np.arange(0, len(rmsfrangeavg[0])), np.mean(rmsfrangeavg10, axis=0), color='b', label="mean", linewidth=0.7)
 
-    ax6.fill_between(np.arange(0, len(rmsfrangeavg[0])), np.mean(rmsfrangeavg10, axis=0) - np.std(rmsfrangeavg10, axis=0), np.mean(rmsfrangeavg10, axis=0) + np.std(rmsfrangeavg10, axis=0), color='b', alpha=0.4)
+    ax[6].fill_between(np.arange(0, len(rmsfrangeavg[0])), np.mean(rmsfrangeavg10, axis=0) - np.std(rmsfrangeavg10, axis=0), np.mean(rmsfrangeavg10, axis=0) + np.std(rmsfrangeavg10, axis=0), color='b', alpha=0.4)
     
-    ax7.plot(np.arange(634, 1267), np.mean(rmsfrangeavg20, axis=0), color='b', label="mean", linewidth=0.7)
+    ax[7].plot(np.arange(634, 1267), np.mean(rmsfrangeavg20, axis=0), color='b', label="mean", linewidth=0.7)
 
-    ax7.fill_between(np.arange(634, 1267), np.mean(rmsfrangeavg20, axis=0) - np.std(rmsfrangeavg20, axis=0), np.mean(rmsfrangeavg20, axis=0) + np.std(rmsfrangeavg20, axis=0), color='b', alpha=0.4)
+    ax[7].fill_between(np.arange(634, 1267), np.mean(rmsfrangeavg20, axis=0) - np.std(rmsfrangeavg20, axis=0), np.mean(rmsfrangeavg20, axis=0) + np.std(rmsfrangeavg20, axis=0), color='b', alpha=0.4)
     
-    ax8.plot(np.arange(1268,1901), np.mean(rmsfrangeavg30, axis=0), color='b', label="mean", linewidth=0.7)
+    ax[8].plot(np.arange(1268,1901), np.mean(rmsfrangeavg30, axis=0), color='b', label="mean", linewidth=0.7)
 
-    ax8.fill_between(np.arange(1268,1901), np.mean(rmsfrangeavg30, axis=0) - np.std(rmsfrangeavg30, axis=0), np.mean(rmsfrangeavg30, axis=0) + np.std(rmsfrangeavg30, axis=0), color='b', alpha=0.4)
+    ax[8].fill_between(np.arange(1268,1901), np.mean(rmsfrangeavg30, axis=0) - np.std(rmsfrangeavg30, axis=0), np.mean(rmsfrangeavg30, axis=0) + np.std(rmsfrangeavg30, axis=0), color='b', alpha=0.4)
     
 
-    ax1.set_xlabel('Time (ns)')
-    ax1.set_ylabel('RMSD (A)')
-    ax1.legend()
-    fig1.savefig('Analysis/rmsd_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
+    ax[1].set_xlabel('Time (ns)')
+    ax[1].set_ylabel('RMSD (A)')
+    ax[1].legend()
+    fig[1].savefig('Analysis/rmsd_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
     print('Analysis/rmsd_'+typ+'.png file generated! Last updated at ',datetime.now())
-    plt.close(fig1)
+    plt.close(fig[1])
     
-    ax2.set_xlabel('Time (ns)')
-    ax2.set_ylabel('rgyr (A)')
-    ax2.legend()
-    fig2.savefig('Analysis/rgyr_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
-    plt.close(fig2)
+    ax[2].set_xlabel('Time (ns)')
+    ax[2].set_ylabel('rgyr (A)')
+    ax[2].legend()
+    fig[2].savefig('Analysis/rgyr_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
+    plt.close(fig[2])
 
     print('Analysis/rgyr_'+typ+'.png file generated! Last updated at ',datetime.now())
-    ax3.set_xlabel('Residues')
-    ax3.set_ylabel('rmsf (A)')
-    ax3.legend()
-    fig3.savefig('Analysis/rmsf1_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
+    ax[3].set_xlabel('Residues')
+    ax[3].set_ylabel('rmsf (A)')
+    ax[3].legend()
+    fig[3].savefig('Analysis/rmsf1_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
     print('Analysis/rmsf1_'+typ+'.png file generated! Last updated at ',datetime.now())
-    plt.close(fig3)
+    plt.close(fig[3])
 
     
-    ax4.set_xlabel('Residues')
-    ax4.set_ylabel('rmsf (A)')
-    ax4.legend()
-    fig4.savefig('Analysis/rmsf2_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
+    ax[4].set_xlabel('Residues')
+    ax[4].set_ylabel('rmsf (A)')
+    ax[4].legend()
+    fig[4].savefig('Analysis/rmsf2_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
     print('Analysis/rmsf2_'+typ+'.png file generated! Last updated at ',datetime.now())
-    plt.close(fig4)
+    plt.close(fig[4])
     
-    ax5.set_xlabel('Residues')
-    ax5.set_ylabel('rmsf (A)')
-    ax5.legend()
-    fig5.savefig('Analysis/rmsf3_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
+    ax[5].set_xlabel('Residues')
+    ax[5].set_ylabel('rmsf (A)')
+    ax[5].legend()
+    fig[5].savefig('Analysis/rmsf3_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
     print('Analysis/rmsf3_'+typ+'.png file generated! Last updated at ',datetime.now())
-    plt.close(fig5)
+    plt.close(fig[5])
     
-    ax6.set_xlabel('Residues')
-    ax6.set_ylabel('rmsf (A)')
-    ax6.legend()
-    fig6.savefig('Analysis/rmsf1avg_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
+    ax[6].set_xlabel('Residues')
+    ax[6].set_ylabel('rmsf (A)')
+    ax[6].legend()
+    fig[6].savefig('Analysis/rmsf1avg_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
     print('Analysis/rmsf1avg_'+typ+'.png file generated! Last updated at ',datetime.now())
-    plt.close(fig6)
+    plt.close(fig[6])
     
     
-    ax7.set_xlabel('Residues')
-    ax7.set_ylabel('rmsf (A)')
-    ax7.legend()
-    fig7.savefig('Analysis/rmsf2avg_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
+    ax[7].set_xlabel('Residues')
+    ax[7].set_ylabel('rmsf (A)')
+    ax[7].legend()
+    fig[7].savefig('Analysis/rmsf2avg_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
     print('Analysis/rmsf2avg_'+typ+'.png file generated! Last updated at ',datetime.now())
-    plt.close(fig7)
+    plt.close(fig[7])
     
     
-    ax8.set_xlabel('Residues')
-    ax8.set_ylabel('rmsf (A)')
-    ax8.legend()
-    fig8.savefig('Analysis/rmsf3avg_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
+    ax[8].set_xlabel('Residues')
+    ax[8].set_ylabel('rmsf (A)')
+    ax[8].legend()
+    fig[8].savefig('Analysis/rmsf3avg_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
     print('Analysis/rmsf3avg_'+typ+'.png file generated! Last updated at ',datetime.now())
-    plt.close(fig8)
+    plt.close(fig[8])
     
     
     
-    ax9.set_xlabel('Time (ns)')
-    ax9.set_ylabel('rgyr (A)')
-    ax9.legend()
-    fig9.savefig('Analysis/rgyrgly_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
-    plt.close(fig9)
+    ax[9].set_xlabel('Time (ns)')
+    ax[9].set_ylabel('rgyr (A)')
+    ax[9].legend()
+    fig[9].savefig('Analysis/rgyrgly_'+typ+'.png', bbox_inches='tight', pad_inches=0.1, dpi = 480, facecolor='white' )
+    plt.close(fig[9])
 
 
 analysis('prot', 500)
 analysis('m9', 300)
-analysis('nat', 150)
+analysis('nat', 600)
 end_time = datetime.now()
 print('Program took {}'.format(end_time - start_time))
